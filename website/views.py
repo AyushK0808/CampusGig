@@ -7,4 +7,8 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html",user=current_user)
 
-
+@login_required
+@views.route('/profile')
+def profile():
+    
+    return render_template("profile.html",user=current_user)

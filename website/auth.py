@@ -36,6 +36,7 @@ def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         name = request.form.get('name')
+        role = request.form.get('user_type')
         password1 = request.form.get('password1')
         #password2 = request.form.get('password2')
         user = User.query.filter_by(email=email).first()
@@ -50,7 +51,7 @@ def signup():
         elif len(password1) < 2:
             flash('Password must be at least 2 characters.', category='error')
         else:
-            new_user = User(email=email,username=name,password=generate_password_hash(password1, method='sha256'),role='student')
+            new_user = User(email=email,username=name,password=generate_password_hash(password1, method='sha256'),role=role)
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
