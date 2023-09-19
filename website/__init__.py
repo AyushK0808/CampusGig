@@ -1,6 +1,10 @@
 from flask import Flask 
-from os import path
-from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+
+db=SQLAlchemy()
+
+
 def create_app():
     from .auth import auth
     from .views import views
@@ -9,12 +13,19 @@ def create_app():
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth,url_prefix='/')
 
-    app.config['MYSQL_HOST'] = 'localhost'
-    app.config['MYSQL_USER'] = 'root'
-    app.config['MYSQL_PASSWORD'] = 'root'
-    app.config['MYSQL_DB'] = 'hackbattle'
-    app.secret_key = 'your secret key'
-    mysql = MySQL(app)
+    app.config['SECRET_KEY'] = 'NoIdontwantthat'
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:root@localhost/hackbattle"
+    db.init_app(app)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
+    from .models import User
+
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
 
     return app 

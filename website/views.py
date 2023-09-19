@@ -1,10 +1,10 @@
-from flask import Flask,Blueprint,render_template,session,request,redirect,url_for
+from flask import Flask,Blueprint,render_template,session,request,redirect,url_for,flash
+from flask_login import login_required, current_user
 
 views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    return render_template('<h1>Test</h1>')
-
+    return render_template("home.html",user=current_user)
 
 

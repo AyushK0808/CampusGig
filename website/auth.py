@@ -1,60 +1,59 @@
-from flask import Blueprint,Flask, render_template, request, redirect, url_for, session
-from flask_mysqldb import MySQL
-import MySQLdb.cursors
-import re
-
+from flask import Blueprint,render_template,request,flash,redirect, url_for
+from .models import User
+from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import login_user, login_required, logout_user, current_user
+from .models import db
 
 auth = Blueprint('auth', __name__)
- 
-@auth.route('/')
-@auth.route('/login', methods =['GET', 'POST'])
+
+@auth.route('/login', methods=['GET','POST'])
 def login():
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
-        password = request.form['password']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user WHERE username = % s AND password = % s', (username, password, ))
-        account = cursor.fetchone()
-        if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            msg = 'Logged in successfully !'
-            return render_template('index.html', msg = msg)
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password,password):
+                flash('Logged in Successfully!',category='sucess')
+                login_user(user, remember=True)
+                return redirect("/")
+            else:
+                flash('Incorrect Password! ',category='error')
         else:
-            msg = 'Incorrect username / password !'
-    return render_template('login.html', msg = msg)
- 
+            flash("Email Doesn't exist",category='error')
+    return render_template("login.html",user=current_user)
+
 @auth.route('/logout')
+
+@login_required
 def logout():
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
-    return redirect(url_for('login'))
- 
-@auth.route('/register', methods =['GET', 'POST'])
-def register():
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form :
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user WHERE username = % s', (username, ))
-        account = cursor.fetchone()
-        if account:
-            msg = 'Account already exists !'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address !'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers !'
-        elif not username or not password or not email:
-            msg = 'Please fill out the form !'
+    logout_user()
+    return redirect(url_for('auth.login'))
+
+@auth.route('/signup',methods=['GET','POST'])
+def signup():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        name = request.form.get('name')
+        password1 = request.form.get('password1')
+        #password2 = request.form.get('password2')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            flash('Email already exists!',category='error')
+        elif len(email) < 4:
+            flash('Email must be greater than 3 characters.', category='error')
+        elif len(name) < 2:
+            flash('First name must be greater than 1 character.', category='error')
+        #elif password1 != password2:
+        #   flash('Passwords don\'t match.', category='error')
+        elif len(password1) < 2:
+            flash('Password must be at least 2 characters.', category='error')
         else:
-            cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s)', (username, password, email, ))
-            mysql.connection.commit()
-            msg = 'You have successfully registered !'
-    elif request.method == 'POST':
-        msg = 'Please fill out the form !'
-    return render_template('register.html', msg = msg)
+            new_user = User(email=email,username=name,password=generate_password_hash(password1, method='sha256'),role='student')
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=True)
+            flash("Account Created!",category="success")  
+            return redirect(url_for('views.home')) 
+    return render_template("signup.html",user=current_user)
