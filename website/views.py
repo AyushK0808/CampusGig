@@ -6,7 +6,7 @@ import mysql.connector
 db_connection = mysql.connector.connect(
 host='localhost',
 user='root',
-password='root',
+password='mysql',
 database='hackbattle'
 )
 cursor=db_connection.cursor()
@@ -139,6 +139,8 @@ def opportunities():
 @login_required
 @views.route('/application/<int:job_id>',methods=['GET','POST'])
 def application(job_id):
+    cursor.execute("SELECT * FROM project WHERE id = %s", (job_id,))
+    job = cursor.fetchone()
     user_id = current_user.id
     sql = "SELECT * FROM application WHERE jobid = %s AND user_id = %s"
     values = (job_id, user_id)
@@ -150,8 +152,9 @@ def application(job_id):
         timeframe = request.form['timeframe']
         price_quote = request.form['price_quote']
         remarks = request.form['remarks']
-        sql = "INSERT INTO application (jobid, quote, remarks, date, user_id) VALUES (%s, %s, %s, %s, %s)"
-        values = (job_id, price_quote, remarks, timeframe, user_id)
+        jobtitle=job[1]
+        sql = "INSERT INTO application (jobid, quote, remarks, date, user_id, jobtitle) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (job_id, price_quote, remarks, timeframe, user_id, jobtitle)
         cursor.execute(sql, values)
         db_connection.commit()
         return redirect(url_for('views.myapplications'))
