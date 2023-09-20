@@ -1,0 +1,22 @@
+{% block content %}
+<div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <h2>Your applications are given below:</h2>
+    <div class="row">
+        {% for application in applications %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quote: {{ application[1] }} rupees</h5>
+                    <p class="card-text">Timeframe: {{ application[3] }}</p>
+                    <p class="card-text">Remarks: {{ application[2] }}</p>
+                    <div class="mt-2">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -10,6 +10,7 @@ password='mysql',
 database='hackbattle'
 )
 cursor=db_connection.cursor()
+cursor = db_connection.cursor(buffered=True)
 
 views = Blueprint('views', __name__)
 
@@ -128,11 +129,30 @@ def opportunities():
     sql = "SELECT * FROM project"
     cursor.execute(sql)
     jobs = cursor.fetchall()
+    for job in jobs:
+        pass
     return render_template("opportunities.html",jobs=jobs,user = current_user)
 
 @login_required
 @views.route('/application/<int:job_id>',methods=['GET','POST'])
 def application(job_id):
+    user_id = current_user.id
+    sql = "SELECT * FROM application WHERE jobid = %s AND user_id = %s"
+    values = (job_id, user_id)
+    cursor.execute(sql, values)
+    record = cursor.fetchone()
+    if record:
+        return redirect(url_for('views.opportunities'))
+    if request.method == 'POST':
+        timeframe = request.form['timeframe']
+        price_quote = request.form['price_quote']
+        remarks = request.form['remarks']
+        sql = "INSERT INTO application (jobid, quote, remarks, date, user_id) VALUES (%s, %s, %s, %s, %s)"
+        values = (job_id, price_quote, remarks, timeframe, user_id)
+        cursor.execute(sql, values)
+        db_connection.commit()
+        return redirect(url_for('views.myapplications'))
+
     sql = "SELECT * FROM project WHERE id = %s"
     cursor.execute(sql, (job_id,))
     job = cursor.fetchone()
@@ -160,3 +180,12 @@ def collabform():
         db_connection.commit()
         return redirect(url_for('views.recruit'))
     return render_template("collabform.html")
+
+@login_required
+@views.route('/myapplications',methods=['GET','POST'])
+def myapplications():
+    user_id = current_user.id
+    sql = "SELECT * FROM application WHERE user_id = %s"
+    cursor.execute(sql, (user_id,))
+    applications = cursor.fetchall()
+    return render_template("myapplications.html",applications=applications,user = current_user)
