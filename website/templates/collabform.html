@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>Collaboration Project Form</title>
+</head>
+<body>
+    <h1>Find collaborators!</h1>
+    <form method="POST" action="/collabform">
+        <div class="form-group">
+            <label for="job_title">Project Title:</label>
+            <input type="text" id="job_title" name="job_title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Project Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="skills">Required Skills:</label>
+            <select id="skills" name="skills[]" multiple="multiple" required class="select2">
+                <option value="programming">Programming</option>
+                <option value="design">Design</option>
+                <option value="writing">Writing</option>
+                <option value="marketing">Marketing</option>
+            </select>
+        </div>        
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
