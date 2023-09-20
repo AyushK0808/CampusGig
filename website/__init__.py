@@ -14,7 +14,7 @@ def create_app():
     app.register_blueprint(auth,url_prefix='/')
 
     app.config['SECRET_KEY'] = 'NoIdontwantthat'
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:mysql@localhost/hackbattle"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:root@localhost/hackbattle"
     db.init_app(app)
 
     login_manager = LoginManager()
@@ -35,7 +35,7 @@ def db_connect():
     db_connection = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='mysql',
+    password='root',
     database='hackbattle'
     )
     return db_connection.cursor()

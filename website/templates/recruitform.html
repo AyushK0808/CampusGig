@@ -1,10 +1,6 @@
-<html>
-<head>
-    <title>Recruit Form</title>
-</head>
-<body>
-    <h1>Recruit Freelancers</h1>
-    <form method="POST" action="/recruitform">
+{% extends "base.html" %}
+{% block content %}
+    <!-- <form method="POST" action="/recruitform">
         <div class="form-group">
             <label for="job_title">Job Title:</label>
             <input type="text" id="job_title" name="job_title" required>
@@ -21,8 +17,8 @@
         </div>
 
         <div class="form-group">
-            <label for="skills">Required Skills:</label>
-            <select id="skills" name="skills[]" multiple="multiple" required class="select2">
+            <label for="skills" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Required Skills:</label>
+            <select id="skills" name="skills[]" multiple="multiple" required class="select2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="programming">Programming</option>
                 <option value="design">Design</option>
                 <option value="writing">Writing</option>
@@ -31,6 +27,50 @@
         </div>        
 
         <button type="submit">Submit</button>
+    </form> -->
+    <form method="POST" action="/recruitform">
+
+    <section class="text-gray-400 bg-gray-900 body-font relative">
+      <div class="container px-5 py-24 mx-auto">
+        <div class="flex flex-col text-center w-full mb-12">
+          <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Post an Opportunity</h1>
+          <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Outsource to CampusGeeks</p>
+        </div>
+        <div class="lg:w-1/2 md:w-2/3 mx-auto">
+          <div class="flex flex-wrap -m-2">
+            <div class="p-2 w-full">
+              <div class="relative">
+                <label for="name" class="leading-7 text-sm text-gray-400">Project Title</label>
+                <input type="text" id="name" name="job_title" class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+              </div>
+              <div class="relative">
+                <label for="name" class="leading-7 text-sm text-gray-400">Budget</label>
+                <input type="number" id="budget" name="budget" required class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+              </div>
+            </div>
+            </div>
+            <div class="p-2 w-full">
+              <div class="relative">
+                <label for="message" class="leading-7 text-sm text-gray-400">Project Description</label>
+                <textarea id="description" name="description" rows="4" required class="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 h-32 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+              </div>
+              
+            <div class="p-2 w-full">
+                <label for="skills" class="leading-7 text-sm text-gray-400">Required Skills:</label>
+                <select id="skills" name="skills[]" multiple="multiple" required class="select2" class="p-2 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="programming">Programming</option>
+                    <option value="design">Design</option>
+                    <option value="writing">Writing</option>
+                    <option value="marketing">Marketing</option>
+            </select>
+            </div>        
+            </div>
+            <div class="p-2 w-full">
+              <button type="submit" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Post</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     </form>
-</body>
-</html>
+{% endblock %}

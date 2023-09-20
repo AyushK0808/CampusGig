@@ -1,16 +1,8 @@
+{% extends "base.html" %}
 {% block content %}
 
-<form method = "POST" >
-    <h1>Signup</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <ul class="flash-messages">
-        {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+<form method = "POST" >        
+    <!-- </div>
     <div class="form-group">
         <label for="email">Email Address</label>
         <input type="email" id="email" name="email" placeholder="Enter email">
@@ -40,5 +32,53 @@
     <br>
 
     <button type="submit" class=""> Submit </button>
-</form>
+</form> -->
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md mb-4">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+
+<section class="text-gray-400 from-gray-900 via-gray-800 to-gray-900 bg-gradient-to-br body-font">
+    <div class="container px-5 py-2 mx-auto flex flex-wrap items-center">
+      <div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
+        <h1 class="title-font font-medium text-3xl text-white">Register to CampusGig.</h1>
+        <p class="leading-relaxed mt-4">"CampusGig is a transformative platform to access tailored freelance work opportunities, internships, and projects, fostering skill development, career growth, and a vibrant community."</p>
+      </div>
+      <div class="lg:w-2/6 md:w-1/2 bg-gray-800 bg-opacity-50 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
+        <h2 class="text-white text-lg font-medium title-font mb-5">Sign Up</h2>
+        <form method = "POST" >
+        <div class="relative mb-4">
+          <label for="full-name" class="leading-7 text-sm text-gray-400">E-mail</label>
+          <input type="email" placeholder="E-mail" id="email" name="email" class="w-full bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+        </div>
+        <div class="relative mb-4">
+            <label for="full-name" class="leading-7 text-sm text-gray-400">Name</label>
+            <input type="name" placeholder="name" id="email" name="name" class="w-full bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          </div>
+        <div class="relative mb-4">
+          <label for="email" class="leading-7 text-sm text-gray-400">Password</label>
+          <input type="password" id="name" name="password1" placeholder="Password" class="w-full bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+        </div>
+        <div class="relative mb-4">
+            <label for="email" class="leading-7 text-sm text-gray-400">Confirm Password</label>
+            <input type="password" id="name" name="password2" placeholder="Confirm Password" class="w-full bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+          </div>
+        <div class="relative mb-4">
+        <label for="user_type" class="leading-7 text-sm text-gray-400">User Type:</label>
+            <select name="user_type" id="user_type" class="w-full bg-gray-600 bg-opacity-20 focus:bg-transparent focus:ring-2 focus:ring-indigo-900 rounded border border-gray-600 focus:border-indigo-500 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                <option value="student">Student</option>
+                <option value="recruiter">Recruiter</option>
+            </select>
+        </div>
+        <button class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg" type="submit">Log In</button>
+        <p class="text-xs mt-3">One click away from the Gig.</p>
+        </form>
+      </div>
+      <br><br><br>
+    </div>
+  </section>
 {% endblock %}

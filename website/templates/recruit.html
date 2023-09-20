@@ -1,26 +1,41 @@
+{% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <h1>Welcome, {{ user.username }}!</h1>
-    <h2>Your Job Listings:</h2>
-    <div class="row">
-        {% for job in jobs %}
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Title: {{ job[1] }}</h5>
-                    <p class="card-text">Description: {{ job[2] }}</p>
-                    <p class="card-text">Budget: ${{ job[3] }}</p>
-                    <p class="card-text">Skills Required: {{ job[4] }}</p>
-                    <p class="card-text">Posted Date: {{ job[6] }}</p>
-                    <!-- Edit and Delete Buttons -->
-                    <div class="mt-2">
-                        <a href="{{ url_for('views.edit_recruit', job_id=job[0]) }}" class="btn btn-warning">Edit</a>
-                        <a href="{{ url_for('views.delete_recruit', job_id=job[0]) }}" class="btn btn-danger">Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+<section class="text-gray-400 body-font bg-gray-900">
+  <div class="container px-5 py-2 mx-auto">
+    <div class="flex flex-wrap w-full mb-20">
+      <div class="lg:w-1/2 w-full mb-6 lg:mb-0">
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-white">Your Posted Opportunities</h1>
+        <div class="h-1 w-20 bg-indigo-500 rounded"></div>
+      </div>
+      <a href="/recruitform"><button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">+Post</button></a>
     </div>
-</div>
+  </div></section>
+     
+{% for job in jobs %}
+
+<section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+  <div class="container px-5 py-2 mx-auto">
+    <div class="lg:w-4/5 mx-auto flex flex-wrap">
+      <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+        <h2 class="text-sm title-font text-gray-500 tracking-widest"> {{ job[6] }}</h2>
+        <h1 class="text-white text-3xl title-font font-medium mb-4"> {{ job[1] }}</h1>
+        <div class="flex mb-4">
+          <a class="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-2 text-lg px-1">Description</a>
+        </div>
+        <p class="leading-relaxed mb-4">{{ job[2] }}</p>
+        <div class="flex border-t border-gray-800 py-2">
+          <span class="text-gray-500">Skills Required</span>
+          <span class="ml-auto text-white">{{ job[4] }}</span>
+        </div>
+        <div class="flex">
+          <span class="title-font font-medium text-2xl text-white">₹{{ job[3] }}</span>
+        </div>
+        <a href="{{ url_for('views.edit_recruit', job_id=job[0]) }}"><button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Edit</button></a><br>
+        <a href="{{ url_for('views.delete_recruit', job_id=job[0]) }}"><button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded">Delete</button></a>
+      </div>
+      <img alt="ecommerce" class="h-25 w-25 object-cover object-center rounded" src="../static/images/proj.png">
+    </div>
+  </div>
+</section>
+{% endfor %}
 {% endblock %}

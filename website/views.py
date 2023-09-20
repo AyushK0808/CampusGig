@@ -6,7 +6,7 @@ import mysql.connector
 db_connection = mysql.connector.connect(
 host='localhost',
 user='root',
-password='mysql',
+password='root',
 database='hackbattle'
 )
 cursor=db_connection.cursor()
@@ -24,7 +24,10 @@ def profile():
     user_id = current_user.id
     username = current_user.username
     email = current_user.email
-    return f'Hello User ID: {user_id}, Username: {username}, Email: {email}'
+    role=current_user.role
+    cursor.execute('SELECT skill_name FROM skill')
+    skills_data = cursor.fetchall()
+    return render_template("profile.html",user=current_user,username=username,user_id=user_id,email=email,role=role,skills=skills_data)
 
 @login_required
 @views.route('/editprofile',methods=['GET','POST'])
@@ -121,7 +124,7 @@ def recruitform():
         cursor.execute(sql, values)
         db_connection.commit()
         return redirect(url_for('views.recruit'))
-    return render_template("recruitform.html")
+    return render_template("recruitform.html",user=current_user)
 
 @login_required
 @views.route('/opportunities',methods=['GET','POST'])
