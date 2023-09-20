@@ -6,7 +6,7 @@ import mysql.connector
 db_connection = mysql.connector.connect(
 host='localhost',
 user='root',
-password='root',
+password='mysql',
 database='hackbattle'
 )
 cursor=db_connection.cursor()
@@ -48,7 +48,6 @@ def recruit():
     return render_template("recruit.html", user=current_user,jobs=jobs)
 
 @login_required
-<<<<<<< HEAD
 @views.route('/collab', methods=['GET', 'POST'])
 def collab():
     user = current_user.role
@@ -58,7 +57,7 @@ def collab():
     jobs = cursor.fetchall()
     
     return render_template("collab.html", user=current_user,jobs=jobs)
-=======
+
 @views.route('/recruit/edit/<int:job_id>', methods=['GET', 'POST'])
 def edit_recruit(job_id):
     cursor.execute("SELECT * FROM project WHERE id = %s", (job_id,))
@@ -84,7 +83,19 @@ def edit_recruit(job_id):
 
     return render_template("editrecruit.html", user=current_user, job=job)
 
->>>>>>> ae00b6e0f92122191b21853e71ecd379de5f93ab
+@login_required
+@views.route('/recruit/delete/<int:job_id>', methods=['GET', 'POST'])
+def delete_recruit(job_id):
+    cursor.execute("SELECT * FROM project WHERE id = %s", (job_id,))
+    job = cursor.fetchone()
+
+    if job[5] != current_user.id:
+        flash("You don't have permission to edit this job listing.", 'danger')
+        return redirect(url_for('views.recruit'))
+    
+    delete_query = "DELETE FROM project WHERE id = %s"
+    cursor.execute(delete_query, (job_id,))
+    return redirect(url_for('views.recruit'))
 
 @login_required
 @views.route('/recruitform',methods=['GET','POST'])
@@ -110,6 +121,22 @@ def recruitform():
         db_connection.commit()
         return redirect(url_for('views.recruit'))
     return render_template("recruitform.html")
+
+@login_required
+@views.route('/opportunities',methods=['GET','POST'])
+def opportunities():
+    sql = "SELECT * FROM project"
+    cursor.execute(sql)
+    jobs = cursor.fetchall()
+    return render_template("opportunities.html",jobs=jobs,user = current_user)
+
+@login_required
+@views.route('/application/<int:job_id>',methods=['GET','POST'])
+def application(job_id):
+    sql = "SELECT * FROM project WHERE id = %s"
+    cursor.execute(sql, (job_id,))
+    job = cursor.fetchone()
+    return render_template("application.html",job=job,user = current_user)
 
 @login_required
 @views.route('/collabform',methods=['GET','POST'])
