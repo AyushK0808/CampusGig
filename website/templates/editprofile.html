@@ -1,0 +1,17 @@
+<div>
+    <form action="/editprofile" method="GET">
+        <label for="skills">Select your skills:</label>
+        <select id="skills" name="skills[]" multiple>
+            {% for skill in skills %}
+                <option value="{{ skill[0] }}">{{ skill[0] }}</option>
+            {% endfor %}
+        </select>
+        
+        <input type="submit" value="Submit">
+    </form>
+    <div>
+    {% for i in selected_skills:%}
+        {{i}}
+        {% endfor %}
+    </div>
+</div>

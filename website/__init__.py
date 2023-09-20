@@ -29,3 +29,13 @@ def create_app():
 
 
     return app 
+
+def db_connect():
+    import mysql.connector
+    db_connection = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='mysql',
+    database='hackbattle'
+    )
+    return db_connection.cursor()
