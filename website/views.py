@@ -48,6 +48,32 @@ def recruit():
     
     return render_template("recruit.html", user=current_user,jobs=jobs)
 
+@login_required
+@views.route('/recruit/edit/<int:job_id>', methods=['GET', 'POST'])
+def edit_recruit(job_id):
+    cursor.execute("SELECT * FROM project WHERE id = %s", (job_id,))
+    job = cursor.fetchone()
+
+    if job[5] != current_user.id:
+        flash("You don't have permission to edit this job listing.", 'danger')
+        return redirect(url_for('views.recruit'))
+
+    if request.method == 'POST':
+        job_title = request.form.get('job_title')
+        job_description = request.form.get('job_description')
+        job_budget = request.form.get('job_budget')
+        job_skills = request.form.get('job_skills')
+
+        update_query = "UPDATE project SET title=%s, description=%s, budget=%s, skills_required=%s WHERE id=%s"
+        values = (job_title, job_description, job_budget, job_skills, job_id)
+
+        cursor.execute(update_query, values)
+
+        flash("Job listing updated successfully.", 'success')
+        return redirect(url_for('views.recruit'))
+
+    return render_template("editrecruit.html", user=current_user, job=job)
+
 
 @login_required
 @views.route('/recruitform',methods=['GET','POST'])

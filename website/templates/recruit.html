@@ -12,6 +12,10 @@
                     <p class="card-text">Budget: ${{ job[3] }}</p>
                     <p class="card-text">Skills Required: {{ job[4] }}</p>
                     <p class="card-text">Posted Date: {{ job[6] }}</p>
+                    <!-- Edit and Delete Buttons -->
+                    <div class="mt-2">
+                        <a href="{{ url_for('views.edit_recruit', job_id=job[0]) }}" class="btn btn-warning">Edit</a>
+                    </div>
                 </div>
             </div>
         </div>

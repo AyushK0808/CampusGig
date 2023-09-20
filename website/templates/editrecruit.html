@@ -1,0 +1,24 @@
+{% block content %}
+<div class="container">
+    <h1>Edit Job Listing</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="job_title">Job Title</label>
+            <input type="text" class="form-control" id="job_title" name="job_title" value="{{ job[1] }}">
+        </div>
+        <div class="form-group">
+            <label for="job_description">Description</label>
+            <textarea class="form-control" id="job_description" name="job_description">{{ job[2] }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="job_budget">Budget</label>
+            <input type="text" class="form-control" id="job_budget" name="job_budget" value="{{ job[3] }}">
+        </div>
+        <div class="form-group">
+            <label for="job_skills">Skills Required</label>
+            <input type="text" class="form-control" id="job_skills" name="job_skills" value="{{ job[4] }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock %}
